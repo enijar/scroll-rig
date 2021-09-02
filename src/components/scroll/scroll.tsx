@@ -20,8 +20,6 @@ export default function Scroll({
     lastY: 0,
     currentX: 0,
     currentY: 0,
-    velocityX: 0,
-    velocityY: 0,
   });
 
   const stateRef = React.useRef<State>({
@@ -154,13 +152,7 @@ export default function Scroll({
   }, [native]);
 
   React.useEffect(() => {
-    let nextFrame: number;
-
     function onTouchStart(event: TouchEvent) {
-      const touch = touchRef.current;
-      cancelAnimationFrame(nextFrame);
-      touch.velocityX = 0;
-      touch.velocityY = 0;
       const { pageX, pageY } = event.touches[0] ?? {};
       touchRef.current.down = true;
       touchRef.current.lastX = pageX;
@@ -170,9 +162,6 @@ export default function Scroll({
     function onTouchMove(event: TouchEvent) {
       if (!touchRef.current.down) return;
       const touch = touchRef.current;
-      cancelAnimationFrame(nextFrame);
-      touch.velocityX = 0;
-      touch.velocityY = 0;
       const { pageX, pageY } = event.touches[0] ?? {};
       touch.currentX = pageX;
       touch.currentY = pageY;
@@ -183,38 +172,18 @@ export default function Scroll({
       const distX = Math.abs(deltaX);
       const distY = Math.abs(deltaY);
       updateProgress(dirX, dirY, distX, distY);
-      touch.velocityX = deltaX;
-      touch.velocityY = deltaY;
       touch.lastX = pageX;
       touch.lastY = pageY;
     }
 
     function onTouchEnd() {
-      cancelAnimationFrame(nextFrame);
       touchRef.current.down = false;
-      const touch = touchRef.current;
-      if (Math.abs(touch.velocityY) === 0) return;
-      const dirX = touch.velocityX === 0 ? 0 : Math.sign(touch.velocityX);
-      const dirY = touch.velocityY === 0 ? 0 : Math.sign(touch.velocityY);
-      const stepsX = Math.abs(Math.round(touch.velocityX));
-      const stepsY = Math.abs(Math.round(touch.velocityY));
-      let stepX = 0;
-      let stepY = 0;
-      // Momentum scroll
-      (async function tick() {
-        if (stepX > stepsX && stepY > stepsY) return;
-        nextFrame = requestAnimationFrame(tick);
-        stepX++;
-        stepY++;
-        updateProgress(dirX, dirY, stepX, stepY);
-      })();
     }
 
     window.addEventListener("touchstart", onTouchStart);
     window.addEventListener("touchmove", onTouchMove);
     window.addEventListener("touchend", onTouchEnd);
     return () => {
-      cancelAnimationFrame(nextFrame);
       window.removeEventListener("touchstart", onTouchStart);
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("touchend", onTouchEnd);

@@ -19,8 +19,6 @@ export type Touch = {
   lastY: number;
   currentX: number;
   currentY: number;
-  velocityX: number;
-  velocityY: number;
 };
 
 export type Props = {
