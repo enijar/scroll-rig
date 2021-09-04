@@ -9,7 +9,7 @@ export const ScrollWrapper = styled.div`
 export const ScrollPlane = styled.div`
   will-change: transform;
   min-width: max-content;
-  min-height: 100%;
+  min-height: max-content;
 `;
 
 type ScrollBarsProps = {
@@ -76,6 +76,7 @@ export const ScrollBar = styled.div<ScrollBarProps>`
 export const ScrollBars = styled.div<ScrollBarsProps>`
   position: absolute;
   pointer-events: none;
+  user-select: none;
   top: 0;
   left: 0;
   width: 100%;

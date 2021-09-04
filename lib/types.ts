@@ -11,6 +11,15 @@ export type State = {
     x: number;
     y: number;
   };
+  thumbDown: boolean;
+  thumbOffsetX: number;
+  thumbOffsetY: number;
+  thumbStartX: number;
+  thumbStartY: number;
+  thumbLastX: number;
+  thumbLastY: number;
+  thumbCurrentX: number;
+  thumbCurrentY: number;
 };
 
 export type Touch = {
