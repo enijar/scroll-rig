@@ -1,10 +1,10 @@
 import React from "react";
-import { Box } from "./styles";
-import Scroll from "../scroll/scroll";
+import { Wrapper, Box } from "./styles";
+import Scroll from "../../../lib";
 
-export default function App() {
+export default function NativeComparison() {
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <Wrapper>
       <Scroll style={{ margin: "auto" }}>
         <h2>Custom Scroll 👇</h2>
         {Array.from({ length: 10 }).map((_, index) => {
@@ -17,6 +17,6 @@ export default function App() {
           return <Box key={index}>{index}</Box>;
         })}
       </Scroll>
-    </div>
+    </Wrapper>
   );
 }

@@ -1,5 +1,10 @@
 import styled from "styled-components";
 
+export const Wrapper = styled.div`
+  display: flex;
+  height: 100%;
+`;
+
 export const Box = styled.div`
   height: 50vh;
   aspect-ratio: 1 / 1;
