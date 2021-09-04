@@ -8,23 +8,13 @@ export const ScrollWrapper = styled.div`
 
 export const ScrollPlane = styled.div`
   will-change: transform;
-  width: min-content;
-  height: min-content;
+  min-width: max-content;
+  min-height: 100%;
 `;
 
 type ScrollBarsProps = {
   size: string;
 };
-
-export const ScrollBars = styled.div<ScrollBarsProps>`
-  position: absolute;
-  pointer-events: none;
-  display: flex;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-`;
 
 export const ScrollBarHandle = styled.div`
   will-change: transform;
@@ -55,11 +45,11 @@ export const ScrollBar = styled.div<ScrollBarProps>`
         width: 100%;
         height: ${size};
         margin-top: auto;
-        padding-left: 0.175em;
-        padding-right: 0.175em;
+        padding-left: calc(${size} / 4);
+        padding-right: calc(${size} / 4);
 
         ${ScrollBarHandle} {
-          min-height: calc(100% - 0.35em);
+          min-height: calc(100% - (${size} / 2));
           width: 0;
           margin-top: auto;
           margin-bottom: auto;
@@ -70,15 +60,24 @@ export const ScrollBar = styled.div<ScrollBarProps>`
       height: 100%;
       width: ${size};
       margin-left: auto;
-      padding-top: 0.175em;
-      padding-bottom: 0.175em;
+      padding-top: calc(${size} / 4);
+      padding-bottom: calc(${size} / 4);
 
       ${ScrollBarHandle} {
-        width: calc(100% - 0.35em);
+        width: calc(100% - (${size} / 2));
         height: 0;
         margin-left: auto;
         margin-right: auto;
       }
     `;
   }}
+`;
+
+export const ScrollBars = styled.div<ScrollBarsProps>`
+  position: absolute;
+  pointer-events: none;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 `;

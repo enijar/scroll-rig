@@ -6,13 +6,13 @@ export default function NativeComparison() {
   return (
     <Wrapper>
       <Scroll style={{ margin: "auto" }}>
-        <h2>Custom Scroll 👇</h2>
+        <h2 style={{ textAlign: "center" }}>Custom Scroll 👇</h2>
         {Array.from({ length: 10 }).map((_, index) => {
           return <Box key={index}>{index}</Box>;
         })}
       </Scroll>
       <Scroll native style={{ margin: "auto" }}>
-        <h2>Native Scroll 👇</h2>
+        <h2 style={{ textAlign: "center" }}>Native Scroll 👇</h2>
         {Array.from({ length: 10 }).map((_, index) => {
           return <Box key={index}>{index}</Box>;
         })}

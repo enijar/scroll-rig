@@ -14,7 +14,7 @@ const DEFAULT_STYLE = {};
 export default function Scroll({
   children,
   native = false,
-  scrollBarSize = "0.75em",
+  scrollBarSize = "15px",
   style = DEFAULT_STYLE,
 }: Props) {
   const touchRef = React.useRef<Touch>({
@@ -42,6 +42,7 @@ export default function Scroll({
 
   const wrapperRef = React.useRef<HTMLDivElement>(null);
   const planeRef = React.useRef<HTMLDivElement>(null);
+  const scrollBarsRef = React.useRef<HTMLDivElement>(null);
   const scrollBarXRef = React.useRef<HTMLDivElement>(null);
   const scrollBarYRef = React.useRef<HTMLDivElement>(null);
   const scrollBarHandleXRef = React.useRef<HTMLDivElement>(null);
@@ -102,6 +103,15 @@ export default function Scroll({
           100
         }%`;
       }
+
+      plane.style.paddingTop = state.maxScroll.x === 0 ? "0px" : scrollBarSize;
+      scrollBarX.style.transform =
+        state.maxScroll.x === 0 ? "none" : `translateY(-${scrollBarSize})`;
+      
+      scrollBarX.style.paddingRight =
+        state.maxScroll.y === 0 ? "0px" : scrollBarSize;
+      scrollBarY.style.paddingBottom =
+        state.maxScroll.x === 0 ? "0px" : scrollBarSize;
 
       const offsetX = state.wrapperSize.width * state.progress.x;
       const offsetY = state.wrapperSize.height * state.progress.y;
@@ -213,14 +223,15 @@ export default function Scroll({
         {children}
       </ScrollPlane>
       <ScrollBars
+        ref={scrollBarsRef}
         size={scrollBarSize}
-        style={{ display: native ? "none" : "flex" }}
+        style={{ display: native ? "none" : "block" }}
       >
-        <ScrollBar axis="x" size={scrollBarSize} ref={scrollBarXRef}>
-          <ScrollBarHandle ref={scrollBarHandleXRef} />
-        </ScrollBar>
         <ScrollBar axis="y" size={scrollBarSize} ref={scrollBarYRef}>
           <ScrollBarHandle ref={scrollBarHandleYRef} />
+        </ScrollBar>
+        <ScrollBar axis="x" size={scrollBarSize} ref={scrollBarXRef}>
+          <ScrollBarHandle ref={scrollBarHandleXRef} />
         </ScrollBar>
       </ScrollBars>
     </ScrollWrapper>
