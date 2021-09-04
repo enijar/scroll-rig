@@ -3,21 +3,20 @@ import { Box } from "./styles";
 import Scroll from "../scroll/scroll";
 
 export default function App() {
-  const [native, setNative] = React.useState(false);
-
-  // @note for testing
-  // React.useEffect(() => {
-  //   const timeout = setTimeout(() => {
-  //     setNative(true);
-  //   }, 2000);
-  //   return () => clearTimeout(timeout);
-  // }, []);
-
   return (
-    <Scroll native={native}>
-      {Array.from({ length: 10 }).map((_, index) => {
-        return <Box key={index}>{index}</Box>;
-      })}
-    </Scroll>
+    <div style={{ display: "flex", height: "100%" }}>
+      <Scroll style={{ margin: "auto" }}>
+        <h2>Custom Scroll 👇</h2>
+        {Array.from({ length: 10 }).map((_, index) => {
+          return <Box key={index}>{index}</Box>;
+        })}
+      </Scroll>
+      <Scroll native style={{ margin: "auto" }}>
+        <h2>Native Scroll 👇</h2>
+        {Array.from({ length: 10 }).map((_, index) => {
+          return <Box key={index}>{index}</Box>;
+        })}
+      </Scroll>
+    </div>
   );
 }

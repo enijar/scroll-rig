@@ -9,10 +9,13 @@ import {
 import { Props, State, Touch } from "./types";
 import { clamp } from "./utils";
 
+const DEFAULT_STYLE = {};
+
 export default function Scroll({
   children,
   native = false,
-  scrollBarSize = "0.5em",
+  scrollBarSize = "0.75em",
+  style = DEFAULT_STYLE,
 }: Props) {
   const touchRef = React.useRef<Touch>({
     down: false,
@@ -75,8 +78,8 @@ export default function Scroll({
         0,
         plane.offsetHeight - wrapper.offsetHeight
       );
-      scrollBarX.style.display = state.maxScroll.x === 0 ? "none" : "block";
-      scrollBarY.style.display = state.maxScroll.y === 0 ? "none" : "block";
+      scrollBarX.style.display = state.maxScroll.x === 0 ? "none" : "flex";
+      scrollBarY.style.display = state.maxScroll.y === 0 ? "none" : "flex";
 
       if (state.maxScroll.x > 0) {
         scrollBarHandleX.style.left = `${state.progress.x * 100}%`;
@@ -138,11 +141,19 @@ export default function Scroll({
   React.useEffect(() => {
     function onWheel(event: WheelEvent) {
       if (native) return;
+      if (planeRef.current === null) return;
+      const element = event.target as HTMLElement;
       const dirX = event.deltaX === 0 ? 0 : Math.sign(event.deltaX);
       const dirY = event.deltaY === 0 ? 0 : Math.sign(event.deltaY);
       const distX = Math.abs(event.deltaX);
       const distY = Math.abs(event.deltaY);
-      updateProgress(dirX, dirY, distX, distY);
+      if (
+        element === planeRef.current ||
+        element === wrapperRef.current ||
+        wrapperRef.current.contains(element)
+      ) {
+        updateProgress(dirX, dirY, distX, distY);
+      }
     }
 
     window.addEventListener("wheel", onWheel);
@@ -197,7 +208,7 @@ export default function Scroll({
     >
       <ScrollPlane
         ref={planeRef}
-        style={{ transform: native ? "none" : undefined }}
+        style={{ ...style, transform: native ? "none" : undefined }}
       >
         {children}
       </ScrollPlane>

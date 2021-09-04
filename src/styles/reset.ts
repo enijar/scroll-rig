@@ -35,5 +35,15 @@ export default createGlobalStyle`
     font-weight: normal;
     line-height: 1.2;
     background-color: #1e1e1e;
+    color: #fefefe;
+  }
+
+  h2 {
+    font-size: 2em;
+  }
+
+  h1, h2, h3, h4, h5, h6, p {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
   }
 `;

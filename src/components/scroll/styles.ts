@@ -28,9 +28,10 @@ export const ScrollBars = styled.div<ScrollBarsProps>`
 
 export const ScrollBarHandle = styled.div`
   will-change: transform;
-  background-color: #999999;
+  background-color: #c7c7c7;
   position: relative;
   min-height: 2em;
+  border-radius: 2em;
 `;
 
 type ScrollBarProps = {
@@ -40,7 +41,13 @@ type ScrollBarProps = {
 
 export const ScrollBar = styled.div<ScrollBarProps>`
   pointer-events: all;
-  background-color: #cccccc;
+  background-color: #fafafa;
+
+  :hover {
+    ${ScrollBarHandle} {
+      background-color: #878787;
+    }
+  }
 
   ${({ axis, size }) => {
     if (axis === "x") {
@@ -48,10 +55,14 @@ export const ScrollBar = styled.div<ScrollBarProps>`
         width: 100%;
         height: ${size};
         margin-top: auto;
+        padding-left: 0.175em;
+        padding-right: 0.175em;
 
         ${ScrollBarHandle} {
-          height: 100%;
+          min-height: calc(100% - 0.35em);
           width: 0;
+          margin-top: auto;
+          margin-bottom: auto;
         }
       `;
     }
@@ -59,10 +70,14 @@ export const ScrollBar = styled.div<ScrollBarProps>`
       height: 100%;
       width: ${size};
       margin-left: auto;
+      padding-top: 0.175em;
+      padding-bottom: 0.175em;
 
       ${ScrollBarHandle} {
-        width: 100%;
+        width: calc(100% - 0.35em);
         height: 0;
+        margin-left: auto;
+        margin-right: auto;
       }
     `;
   }}

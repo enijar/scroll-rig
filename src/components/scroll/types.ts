@@ -25,4 +25,5 @@ export type Props = {
   children?: any;
   native?: boolean;
   scrollBarSize?: string;
+  style?: object;
 };
