@@ -16,6 +16,7 @@ jobs:
 
       - name: Install and Build 🔧
         run: |
+          rm -rf node_modules package-lock.json
           npm ci
           npm run build
       - name: Deploy 🚀
