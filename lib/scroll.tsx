@@ -174,10 +174,18 @@ export default function Scroll({
 
   React.useEffect(() => {
     function onTouchStart(event: TouchEvent) {
-      const { pageX, pageY } = event.touches[0] ?? {};
-      touchRef.current.down = true;
-      touchRef.current.lastX = pageX;
-      touchRef.current.lastY = pageY;
+      if (wrapperRef.current === null || planeRef.current === null) return;
+      const element = event.target as HTMLElement;
+      if (
+        element === planeRef.current ||
+        element === wrapperRef.current ||
+        wrapperRef.current.contains(element)
+      ) {
+        const { pageX, pageY } = event.touches[0] ?? {};
+        touchRef.current.down = true;
+        touchRef.current.lastX = pageX;
+        touchRef.current.lastY = pageY;
+      }
     }
 
     function onTouchMove(event: TouchEvent) {
