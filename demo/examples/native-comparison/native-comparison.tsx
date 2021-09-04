@@ -10,12 +10,22 @@ export default function NativeComparison() {
         {Array.from({ length: 10 }).map((_, index) => {
           return <Box key={index}>{index}</Box>;
         })}
+        <div>
+          <label>Test</label>
+          <br />
+          <input />
+        </div>
       </Scroll>
       <Scroll native style={{ margin: "auto" }}>
         <h2 style={{ textAlign: "center" }}>Native Scroll 👇</h2>
         {Array.from({ length: 10 }).map((_, index) => {
           return <Box key={index}>{index}</Box>;
         })}
+        <div>
+          <label>Test</label>
+          <br />
+          <input />
+        </div>
       </Scroll>
     </Wrapper>
   );
