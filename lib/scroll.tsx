@@ -107,7 +107,7 @@ export default function Scroll({
       plane.style.paddingTop = state.maxScroll.x === 0 ? "0px" : scrollBarSize;
       scrollBarX.style.transform =
         state.maxScroll.x === 0 ? "none" : `translateY(-${scrollBarSize})`;
-      
+
       scrollBarX.style.paddingRight =
         state.maxScroll.y === 0 ? "0px" : scrollBarSize;
       scrollBarY.style.paddingBottom =
