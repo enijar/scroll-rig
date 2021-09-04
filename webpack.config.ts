@@ -47,21 +47,6 @@ const config = {
           },
         ],
       },
-      {
-        test: /\.css$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: "css-loader",
-            options: {
-              sourceMap: DEV_MODE,
-            },
-          },
-        ],
-      },
     ],
   },
   plugins: [
