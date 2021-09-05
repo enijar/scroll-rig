@@ -326,8 +326,8 @@ export default function Scroll({
       dragging = true;
       startX = event.pageX - wrapperRef.current.offsetLeft;
       startY = event.pageY - wrapperRef.current.offsetTop;
-      offsetX = startX - scrollBarHandleXRef.current.offsetLeft;
-      offsetY = startY - scrollBarHandleYRef.current.offsetTop;
+      offsetX = Math.abs(startX - scrollBarHandleXRef.current.offsetLeft);
+      offsetY = Math.abs(startY - scrollBarHandleYRef.current.offsetTop);
     }
 
     function onMouseMove(event: MouseEvent) {
@@ -335,8 +335,6 @@ export default function Scroll({
 
       const x = event.pageX - wrapperRef.current.offsetLeft - offsetX;
       const y = event.pageY - wrapperRef.current.offsetTop - offsetY;
-
-      console.log(offsetY);
 
       const maxX =
         wrapperRef.current.offsetHeight -
