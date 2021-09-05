@@ -38,15 +38,6 @@ export default function Scroll({
       x: 0,
       y: 0,
     },
-    thumbDown: false,
-    thumbOffsetX: 0,
-    thumbOffsetY: 0,
-    thumbStartX: 0,
-    thumbStartY: 0,
-    thumbLastX: 0,
-    thumbLastY: 0,
-    thumbCurrentX: 0,
-    thumbCurrentY: 0,
   });
 
   const wrapperRef = React.useRef<HTMLDivElement>(null);
@@ -325,59 +316,44 @@ export default function Scroll({
   }, []);
 
   React.useEffect(() => {
+    let dragging = false;
+    let startX = 0;
+    let startY = 0;
+    let offsetX = 0;
+    let offsetY = 0;
+
     function onMouseDown(event: MouseEvent) {
-      if (scrollBarHandleXRef.current === null) return;
-      if (scrollBarHandleYRef.current === null) return;
-      const thumbWidth = scrollBarHandleYRef.current.clientWidth;
-      const thumbHeight = scrollBarHandleYRef.current.clientHeight;
-      stateRef.current.thumbDown = true;
-
-      stateRef.current.thumbOffsetX =
-        thumbWidth - (event.pageX - scrollBarXRef.current.offsetLeft);
-      stateRef.current.thumbOffsetY =
-        thumbHeight - (event.pageY - scrollBarYRef.current.offsetTop);
-
-      stateRef.current.thumbStartX =
-        event.pageX - wrapperRef.current.offsetLeft;
-      stateRef.current.thumbStartY = event.pageY - wrapperRef.current.offsetTop;
+      dragging = true;
+      startX = event.pageX - wrapperRef.current.offsetLeft;
+      startY = event.pageY - wrapperRef.current.offsetTop;
+      offsetX = startX - scrollBarHandleXRef.current.offsetLeft;
+      offsetY = startY - scrollBarHandleYRef.current.offsetTop;
     }
 
     function onMouseMove(event: MouseEvent) {
-      if (scrollBarXRef.current === null) return;
-      if (scrollBarYRef.current === null) return;
-      if (!stateRef.current.thumbDown) return;
-      const thumbWidth = scrollBarHandleYRef.current.clientWidth;
-      const thumbHeight = scrollBarHandleYRef.current.clientHeight;
-      stateRef.current.thumbCurrentX =
-        event.pageX - scrollBarXRef.current.offsetLeft;
-      stateRef.current.thumbCurrentY =
-        event.pageY - scrollBarYRef.current.offsetTop;
-      const deltaX =
-        stateRef.current.thumbCurrentX -
-        stateRef.current.thumbStartX -
-        thumbWidth;
-      const deltaY =
-        stateRef.current.thumbCurrentY -
-        stateRef.current.thumbStartY -
-        thumbHeight;
-      const offsetX = stateRef.current.thumbStartX + deltaX;
-      const offsetY = stateRef.current.thumbStartY + deltaY;
-      stateRef.current.progress.x = clamp(
-        (1 / (wrapperRef.current.offsetWidth - thumbWidth)) * offsetX,
-        0,
-        1
-      );
-      stateRef.current.progress.y = clamp(
-        (1 / (wrapperRef.current.offsetHeight - thumbHeight)) * offsetY,
-        0,
-        1
-      );
-      stateRef.current.thumbLastX = stateRef.current.thumbCurrentX;
-      stateRef.current.thumbLastY = stateRef.current.thumbCurrentY;
+      if (!dragging) return;
+
+      const x = event.pageX - wrapperRef.current.offsetLeft - offsetX;
+      const y = event.pageY - wrapperRef.current.offsetTop - offsetY;
+
+      console.log(offsetY);
+
+      const maxX =
+        wrapperRef.current.offsetHeight -
+        scrollBarHandleXRef.current.offsetWidth;
+      const maxY =
+        wrapperRef.current.offsetHeight -
+        scrollBarHandleYRef.current.offsetHeight;
+
+      const progressX = (1 / maxX) * x;
+      const progressY = (1 / maxY) * y;
+
+      stateRef.current.progress.x = clamp(progressX, 0, 1);
+      stateRef.current.progress.y = clamp(progressY, 0, 1);
     }
 
     function onMouseUp() {
-      stateRef.current.thumbDown = false;
+      dragging = false;
     }
 
     scrollBarHandleXRef.current.addEventListener("mousedown", onMouseDown);
