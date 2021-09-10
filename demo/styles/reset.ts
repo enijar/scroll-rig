@@ -43,7 +43,7 @@ export default createGlobalStyle`
   }
 
   h1, h2, h3, h4, h5, h6, p {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
   }
 `;

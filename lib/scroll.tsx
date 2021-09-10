@@ -9,14 +9,25 @@ import {
 import { Props, State, Touch } from "./types";
 import { clamp } from "./utils";
 
+type OnScroll = (state: State) => void;
+
+export type ScrollApi = {
+  update: () => void;
+  onScroll: (fn: OnScroll) => void;
+};
+
 const DEFAULT_STYLE = {};
 
-export default function Scroll({
-  children,
-  native = false,
-  scrollBarSize = "15px",
-  style = DEFAULT_STYLE,
-}: Props) {
+function Scroll(
+  {
+    children,
+    native = false,
+    scrollBarSize = "15px",
+    style = DEFAULT_STYLE,
+    controlled = false,
+  }: Props,
+  ref: React.ForwardedRef<ScrollApi>
+) {
   const touchRef = React.useRef<Touch>({
     down: false,
     lastX: 0,
@@ -48,14 +59,117 @@ export default function Scroll({
   const scrollBarHandleXRef = React.useRef<HTMLDivElement>(null);
   const scrollBarHandleYRef = React.useRef<HTMLDivElement>(null);
 
-  // Update state
-  React.useEffect(() => {
+  const update = React.useCallback(() => {
     const wrapper = wrapperRef.current;
     const plane = planeRef.current;
     const scrollBarX = scrollBarXRef.current;
     const scrollBarY = scrollBarYRef.current;
     const scrollBarHandleX = scrollBarHandleXRef.current;
     const scrollBarHandleY = scrollBarHandleYRef.current;
+
+    if (native) return;
+    if (plane === null) return;
+    if (scrollBarX === null) return;
+    if (scrollBarY === null) return;
+
+    wrapper.scrollTop = 0;
+    wrapper.scrollLeft = 0;
+    stateRef.current.wrapperSize.width = wrapper.offsetWidth;
+    stateRef.current.wrapperSize.height = wrapper.offsetHeight;
+    stateRef.current.maxScroll.x = Math.max(
+      0,
+      plane.offsetWidth - wrapper.offsetWidth
+    );
+    stateRef.current.maxScroll.y = Math.max(
+      0,
+      plane.offsetHeight - wrapper.offsetHeight
+    );
+    scrollBarX.style.display =
+      stateRef.current.maxScroll.x === 0 ? "none" : "flex";
+    scrollBarY.style.display =
+      stateRef.current.maxScroll.y === 0 ? "none" : "flex";
+
+    if (stateRef.current.maxScroll.x > 0) {
+      scrollBarHandleX.style.left = `${stateRef.current.progress.x * 100}%`;
+      scrollBarHandleX.style.transform = `translateX(${
+        stateRef.current.progress.x * -100
+      }%)`;
+      scrollBarHandleX.style.width = `${
+        (wrapper.offsetWidth /
+          (stateRef.current.maxScroll.x + wrapper.offsetWidth)) *
+        100
+      }%`;
+    }
+
+    if (stateRef.current.maxScroll.y > 0) {
+      scrollBarHandleY.style.top = `${stateRef.current.progress.y * 100}%`;
+      scrollBarHandleY.style.transform = `translateY(${
+        stateRef.current.progress.y * -100
+      }%)`;
+      scrollBarHandleY.style.height = `${
+        (wrapper.offsetHeight /
+          (stateRef.current.maxScroll.y + wrapper.offsetHeight)) *
+        100
+      }%`;
+    }
+
+    plane.style.paddingTop =
+      stateRef.current.maxScroll.x === 0 ? "0px" : scrollBarSize;
+    scrollBarX.style.transform =
+      stateRef.current.maxScroll.x === 0
+        ? "none"
+        : `translateY(-${scrollBarSize})`;
+
+    scrollBarX.style.paddingRight =
+      stateRef.current.maxScroll.y === 0 ? "0px" : scrollBarSize;
+    scrollBarY.style.paddingBottom =
+      stateRef.current.maxScroll.x === 0
+        ? `calc(${scrollBarSize} / 4)`
+        : scrollBarSize;
+
+    plane.style.paddingLeft =
+      stateRef.current.maxScroll.x === 0 ? "0px" : scrollBarSize;
+    plane.style.paddingBottom =
+      stateRef.current.maxScroll.x > 0 ? "0px" : scrollBarSize;
+
+    const offsetX =
+      stateRef.current.wrapperSize.width * stateRef.current.progress.x;
+    const offsetY =
+      stateRef.current.wrapperSize.height * stateRef.current.progress.y;
+    const scrollOffsetX =
+      stateRef.current.maxScroll.y > 0 ? scrollBarSize : "0px";
+    const scrollOffsetY =
+      stateRef.current.maxScroll.x > 0 ? scrollBarSize : "0px";
+    const translate = {
+      x:
+        stateRef.current.maxScroll.x === 0
+          ? "0px"
+          : `(${stateRef.current.progress.x} * -100%) + ${offsetX}px - ${scrollOffsetX}`,
+      y:
+        stateRef.current.maxScroll.y === 0
+          ? "0px"
+          : `(${stateRef.current.progress.y} * -100%) + ${offsetY}px - ${scrollOffsetY}`,
+    };
+    plane.style.transform = `translate3d(calc(${translate.x}), calc(${translate.y}), 0px)`;
+  }, [controlled, native]);
+
+  const onScrollRef = React.useRef<OnScroll | null>(null);
+
+  const onScroll = React.useCallback((onScroll: OnScroll) => {
+    onScrollRef.current = onScroll;
+  }, []);
+
+  React.useEffect(() => {
+    if (ref === null) return;
+    (ref as React.MutableRefObject<ScrollApi>).current = {
+      update,
+      onScroll,
+    };
+  }, [ref, update, onScroll]);
+
+  // Update state
+  React.useEffect(() => {
+    const wrapper = wrapperRef.current;
 
     if (native) {
       wrapper.scrollLeft =
@@ -69,93 +183,22 @@ export default function Scroll({
     let nextFrame: number;
     (function tick() {
       nextFrame = requestAnimationFrame(tick);
-      if (native) return;
-      if (plane === null) return;
-      if (scrollBarX === null) return;
-      if (scrollBarY === null) return;
-      wrapper.scrollTop = 0;
-      wrapper.scrollLeft = 0;
-      stateRef.current.wrapperSize.width = wrapper.offsetWidth;
-      stateRef.current.wrapperSize.height = wrapper.offsetHeight;
-      stateRef.current.maxScroll.x = Math.max(
-        0,
-        plane.offsetWidth - wrapper.offsetWidth
-      );
-      stateRef.current.maxScroll.y = Math.max(
-        0,
-        plane.offsetHeight - wrapper.offsetHeight
-      );
-      scrollBarX.style.display =
-        stateRef.current.maxScroll.x === 0 ? "none" : "flex";
-      scrollBarY.style.display =
-        stateRef.current.maxScroll.y === 0 ? "none" : "flex";
-
-      if (stateRef.current.maxScroll.x > 0) {
-        scrollBarHandleX.style.left = `${stateRef.current.progress.x * 100}%`;
-        scrollBarHandleX.style.transform = `translateX(${
-          stateRef.current.progress.x * -100
-        }%)`;
-        scrollBarHandleX.style.width = `${
-          (wrapper.offsetWidth /
-            (stateRef.current.maxScroll.x + wrapper.offsetWidth)) *
-          100
-        }%`;
-      }
-
-      if (stateRef.current.maxScroll.y > 0) {
-        scrollBarHandleY.style.top = `${stateRef.current.progress.y * 100}%`;
-        scrollBarHandleY.style.transform = `translateY(${
-          stateRef.current.progress.y * -100
-        }%)`;
-        scrollBarHandleY.style.height = `${
-          (wrapper.offsetHeight /
-            (stateRef.current.maxScroll.y + wrapper.offsetHeight)) *
-          100
-        }%`;
-      }
-
-      plane.style.paddingTop =
-        stateRef.current.maxScroll.x === 0 ? "0px" : scrollBarSize;
-      scrollBarX.style.transform =
-        stateRef.current.maxScroll.x === 0
-          ? "none"
-          : `translateY(-${scrollBarSize})`;
-
-      scrollBarX.style.paddingRight =
-        stateRef.current.maxScroll.y === 0 ? "0px" : scrollBarSize;
-      scrollBarY.style.paddingBottom =
-        stateRef.current.maxScroll.x === 0
-          ? `calc(${scrollBarSize} / 4)`
-          : scrollBarSize;
-
-      plane.style.paddingLeft =
-        stateRef.current.maxScroll.x === 0 ? "0px" : scrollBarSize;
-      plane.style.paddingBottom =
-        stateRef.current.maxScroll.x > 0 ? "0px" : scrollBarSize;
-
-      const offsetX =
-        stateRef.current.wrapperSize.width * stateRef.current.progress.x;
-      const offsetY =
-        stateRef.current.wrapperSize.height * stateRef.current.progress.y;
-      const scrollOffsetX =
-        stateRef.current.maxScroll.y > 0 ? scrollBarSize : "0px";
-      const scrollOffsetY =
-        stateRef.current.maxScroll.x > 0 ? scrollBarSize : "0px";
-      const translate = {
-        x:
-          stateRef.current.maxScroll.x === 0
-            ? "0px"
-            : `(${stateRef.current.progress.x} * -100%) + ${offsetX}px - ${scrollOffsetX}`,
-        y:
-          stateRef.current.maxScroll.y === 0
-            ? "0px"
-            : `(${stateRef.current.progress.y} * -100%) + ${offsetY}px - ${scrollOffsetY}`,
-      };
-      plane.style.transform = `translate3d(calc(${translate.x}), calc(${translate.y}), 0px)`;
     })();
 
     return () => cancelAnimationFrame(nextFrame);
   }, [native]);
+
+  React.useEffect(() => {
+    if (controlled) return;
+
+    let nextFrame: number;
+    (function tick() {
+      nextFrame = requestAnimationFrame(tick);
+      update();
+    })();
+
+    return () => cancelAnimationFrame(nextFrame);
+  }, [native, controlled, update]);
 
   function updateProgress(
     dirX: number,
@@ -170,6 +213,9 @@ export default function Scroll({
     const velocityY = dirY === 0 ? 0 : (1 / maxY) * distY * dirY;
     state.progress.x = clamp(state.progress.x + velocityX, 0, 1);
     state.progress.y = clamp(state.progress.y + velocityY, 0, 1);
+    if (onScrollRef.current !== null) {
+      onScrollRef.current(stateRef.current);
+    }
   }
 
   React.useEffect(() => {
@@ -260,6 +306,9 @@ export default function Scroll({
           stateRef.current.progress.y = 0;
           break;
       }
+      if (onScrollRef.current !== null) {
+        onScrollRef.current(stateRef.current);
+      }
     }
 
     window.addEventListener("keydown", onKeyDown);
@@ -348,6 +397,9 @@ export default function Scroll({
 
       stateRef.current.progress.x = clamp(progressX, 0, 1);
       stateRef.current.progress.y = clamp(progressY, 0, 1);
+      if (onScrollRef.current !== null) {
+        onScrollRef.current(stateRef.current);
+      }
     }
 
     function onMouseUp() {
@@ -386,3 +438,5 @@ export default function Scroll({
     </ScrollWrapper>
   );
 }
+
+export default React.forwardRef(Scroll);
