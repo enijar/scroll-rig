@@ -10,8 +10,7 @@
   "scripts": {
     "start": "NODE_ENV=development webpack serve --mode development",
     "build": "NODE_ENV=production webpack --mode production",
-    "package": "tsc -p tsconfig.lib.json",
-    "prepublishOnly": "npm run package"
+    "release": "./bin/release.js"
   },
   "browserslist": [
     "defaults",
