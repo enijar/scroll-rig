@@ -56,6 +56,10 @@ function Scroll(
       x: 0,
       y: 0,
     },
+    scroll: {
+      x: 0,
+      y: 0,
+    },
     isScrolling: false,
   });
 
@@ -161,6 +165,11 @@ function Scroll(
           : `(${stateRef.current.progress.y} * -100%) + ${offsetY}px - ${scrollOffsetY}`,
     };
     plane.style.transform = `translate3d(calc(${translate.x}), calc(${translate.y}), 0px)`;
+
+    stateRef.current.scroll.x =
+      stateRef.current.progress.x * stateRef.current.maxScroll.x;
+    stateRef.current.scroll.y =
+      stateRef.current.progress.y * stateRef.current.maxScroll.y;
 
     // Call user scroll listener(s)
     if (stateRef.current.isScrolling) {
