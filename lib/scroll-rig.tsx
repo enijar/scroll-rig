@@ -6,21 +6,13 @@ import {
   ScrollPlane,
   ScrollWrapper,
 } from "./styles";
-import { Props, State, Touch } from "./types";
+import { Props, State, Touch, OnScroll, ScrollApi } from "./types";
 import { clamp } from "./utils";
 import useKeyEvents from "./hooks/use-key-events";
 import useTouchEvents from "./hooks/use-touch-events";
 import useFocusEvents from "./hooks/use-focus-events";
 import useMouseEvents from "./hooks/use-mouse-events";
 import useWheelEvents from "./hooks/use-wheel-events";
-
-type OnScroll = (state: State) => void;
-
-export type ScrollApi = {
-  update: () => void;
-  onScroll: (fn: OnScroll) => void;
-  state: State;
-};
 
 const DEFAULT_STYLE = {};
 

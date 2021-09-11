@@ -36,3 +36,11 @@ export type Props = React.HTMLAttributes<HTMLDivElement> & {
   onScrollUpdate?: (state: State) => void;
   classNamePrefix?: string;
 };
+
+export type OnScroll = (state: State) => void;
+
+export type ScrollApi = {
+  update: () => void;
+  onScroll: (fn: OnScroll) => void;
+  state: State;
+};
