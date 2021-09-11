@@ -45,18 +45,11 @@ export default function Image({ element }: Props) {
       mouse.y = my;
     }
 
-    function onMouseOut() {
-      // mouse.x = 0;
-      // mouse.y = 0;
-    }
-
     element.target.addEventListener("mouseover", updateMouse);
     element.target.addEventListener("mousemove", updateMouse);
-    element.target.addEventListener("mouseout", onMouseOut);
     return () => {
       element.target.removeEventListener("mousemove", updateMouse);
       element.target.removeEventListener("mouseover", updateMouse);
-      element.target.removeEventListener("mouseout", onMouseOut);
     };
   }, [element]);
 

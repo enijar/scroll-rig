@@ -31,6 +31,7 @@ function Scroll(
     scrollBarSize = "15px",
     style = DEFAULT_STYLE,
     controlled = false,
+    onScroll,
   }: Props,
   ref: React.ForwardedRef<ScrollApi>
 ) {
@@ -161,9 +162,13 @@ function Scroll(
     };
     plane.style.transform = `translate3d(calc(${translate.x}), calc(${translate.y}), 0px)`;
 
-    if (onScrollRef.current !== null) {
-      if (stateRef.current.isScrolling) {
+    // Call user scroll listener(s)
+    if (stateRef.current.isScrolling) {
+      if (onScrollRef.current) {
         onScrollRef.current(stateRef.current);
+      }
+      if (onScrollHandleRef.current !== null) {
+        onScrollHandleRef.current(stateRef.current);
       }
     }
 
@@ -184,20 +189,25 @@ function Scroll(
     []
   );
 
-  const onScrollRef = React.useRef<OnScroll | null>(null);
-
-  const onScroll = React.useCallback((onScroll: OnScroll) => {
+  const onScrollRef = React.useRef(onScroll);
+  React.useEffect(() => {
     onScrollRef.current = onScroll;
+  }, [onScroll]);
+
+  const onScrollHandleRef = React.useRef<OnScroll | null>(null);
+
+  const handleScroll = React.useCallback((onScroll: OnScroll) => {
+    onScrollHandleRef.current = onScroll;
   }, []);
 
   React.useEffect(() => {
     if (ref === null) return;
     (ref as React.MutableRefObject<ScrollApi>).current = {
       update,
-      onScroll,
+      onScroll: handleScroll,
       state: stateRef.current,
     };
-  }, [ref, update, onScroll]);
+  }, [ref, update, handleScroll]);
 
   React.useEffect(() => {
     const wrapper = wrapperRef.current;

@@ -28,4 +28,5 @@ export type Props = {
   scrollBarSize?: string;
   style?: object;
   controlled?: boolean;
+  onScroll?: (state: State) => void;
 };
