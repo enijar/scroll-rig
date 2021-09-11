@@ -32,6 +32,8 @@ function Scroll(
     style = DEFAULT_STYLE,
     controlled = false,
     onScroll,
+    classNamePrefix = "scroll-rig",
+    ...props
   }: Props,
   ref: React.ForwardedRef<ScrollApi>
 ) {
@@ -256,9 +258,11 @@ function Scroll(
   return (
     <ScrollWrapper
       ref={wrapperRef}
-      style={{ overflow: native ? "auto" : "hidden" }}
+      style={{ ...props, overflow: native ? "auto" : "hidden" }}
+      className={classNamePrefix}
     >
       <ScrollPlane
+        className={`${classNamePrefix}-plane`}
         ref={planeRef}
         style={{
           ...style,
@@ -268,15 +272,32 @@ function Scroll(
         {children}
       </ScrollPlane>
       <ScrollBars
+        className={`${classNamePrefix}-scroll-bars`}
         ref={scrollBarsRef}
         size={scrollBarSize}
         style={{ display: native ? "none" : undefined }}
       >
-        <ScrollBar axis="y" size={scrollBarSize} ref={scrollBarYRef}>
-          <ScrollBarHandle ref={scrollBarHandleYRef} />
+        <ScrollBar
+          className={`${classNamePrefix}-scroll-bar ${classNamePrefix}-scroll-bar-y`}
+          axis="y"
+          size={scrollBarSize}
+          ref={scrollBarYRef}
+        >
+          <ScrollBarHandle
+            className={`${classNamePrefix}-scroll-bar-handle ${classNamePrefix}-scroll-bar-handle-y`}
+            ref={scrollBarHandleYRef}
+          />
         </ScrollBar>
-        <ScrollBar axis="x" size={scrollBarSize} ref={scrollBarXRef}>
-          <ScrollBarHandle ref={scrollBarHandleXRef} />
+        <ScrollBar
+          className={`${classNamePrefix}-scroll-bar ${classNamePrefix}-scroll-bar-x`}
+          axis="x"
+          size={scrollBarSize}
+          ref={scrollBarXRef}
+        >
+          <ScrollBarHandle
+            className={`${classNamePrefix}-scroll-bar-handle ${classNamePrefix}-scroll-bar-handle-x`}
+            ref={scrollBarHandleXRef}
+          />
         </ScrollBar>
       </ScrollBars>
     </ScrollWrapper>

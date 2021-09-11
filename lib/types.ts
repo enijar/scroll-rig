@@ -1,3 +1,5 @@
+import React from "react";
+
 export type State = {
   maxScroll: {
     x: number;
@@ -26,11 +28,11 @@ export type Touch = {
   currentY: number;
 };
 
-export type Props = {
-  children?: any;
+export type Props = React.HTMLProps<HTMLDivElement> & {
   native?: boolean;
   scrollBarSize?: string;
   style?: object;
   controlled?: boolean;
   onScroll?: (state: State) => void;
+  classNamePrefix?: string;
 };
