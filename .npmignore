@@ -1,0 +1,9 @@
+.idea/
+.github/
+demo/
+lib/
+.DS_Store
+.editorconfig
+webpack.config.json
+tsconfig.json
+tsconfig.lib.json
