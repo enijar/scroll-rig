@@ -1,3 +1,5 @@
-import Scroll from "./scroll";
+import ScrollRig from "./scroll-rig";
 
-export default Scroll;
+export * from "./types";
+
+export default ScrollRig;

@@ -1,11 +1,11 @@
 import React from "react";
 import { Box, Wrapper } from "./styles";
-import Scroll from "../../../lib";
+import ScrollRig from "../../../lib";
 
 export default function NativeComparison() {
   return (
     <Wrapper>
-      <Scroll onScrollUpdate={(state) => console.log(state.progress.y)}>
+      <ScrollRig onScrollUpdate={(state) => console.log(state.progress.y)}>
         <h2>
           Custom Scroll 👇 <br />
           <small>(Open Console for Logs)</small>
@@ -13,13 +13,13 @@ export default function NativeComparison() {
         {Array.from({ length: 10 }).map((_, index) => {
           return <Box key={index}>{index}</Box>;
         })}
-      </Scroll>
-      <Scroll native className="scroll">
+      </ScrollRig>
+      <ScrollRig native className="scroll">
         <h2>Native Scroll 👇</h2>
         {Array.from({ length: 10 }).map((_, index) => {
           return <Box key={index}>{index}</Box>;
         })}
-      </Scroll>
+      </ScrollRig>
     </Wrapper>
   );
 }

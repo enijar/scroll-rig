@@ -24,7 +24,7 @@ export type ScrollApi = {
 
 const DEFAULT_STYLE = {};
 
-function Scroll(
+function ScrollRig(
   {
     children,
     native = false,
@@ -302,4 +302,4 @@ function Scroll(
   );
 }
 
-export default React.forwardRef(Scroll);
+export default React.forwardRef(ScrollRig);
