@@ -6,6 +6,11 @@ export const Wrapper = styled.div`
 
   h2 {
     text-align: center;
+    line-height: 1em;
+
+    small {
+      font-size: 0.6em;
+    }
   }
 `;
 

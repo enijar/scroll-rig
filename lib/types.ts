@@ -28,11 +28,11 @@ export type Touch = {
   currentY: number;
 };
 
-export type Props = React.HTMLProps<HTMLDivElement> & {
+export type Props = React.HTMLAttributes<HTMLDivElement> & {
   native?: boolean;
   scrollBarSize?: string;
   style?: object;
   controlled?: boolean;
-  onScroll?: (state: State) => void;
+  onScrollUpdate?: (state: State) => void;
   classNamePrefix?: string;
 };

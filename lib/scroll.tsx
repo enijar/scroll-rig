@@ -31,7 +31,7 @@ function Scroll(
     scrollBarSize = "15px",
     style = DEFAULT_STYLE,
     controlled = false,
-    onScroll,
+    onScrollUpdate,
     classNamePrefix = "scroll-rig",
     ...props
   }: Props,
@@ -92,11 +92,11 @@ function Scroll(
     stateRef.current.wrapperSize.height = wrapper.offsetHeight;
     stateRef.current.maxScroll.x = Math.max(
       0,
-      plane.offsetWidth - wrapper.offsetWidth
+      plane.scrollWidth - wrapper.offsetWidth
     );
     stateRef.current.maxScroll.y = Math.max(
       0,
-      plane.offsetHeight - wrapper.offsetHeight
+      plane.scrollHeight - wrapper.offsetHeight
     );
     scrollBarX.style.display =
       stateRef.current.maxScroll.x === 0 ? "none" : "flex";
@@ -141,11 +141,11 @@ function Scroll(
 
     plane.style.maxHeight =
       stateRef.current.maxScroll.x === 0
-        ? undefined
+        ? "unset"
         : `calc(100% - ${scrollBarSize})`;
     plane.style.maxWidth =
       stateRef.current.maxScroll.y === 0
-        ? undefined
+        ? "unset"
         : `calc(100% - ${scrollBarSize})`;
 
     const offsetX =
@@ -175,8 +175,8 @@ function Scroll(
 
     // Call user scroll listener(s)
     if (stateRef.current.isScrolling) {
-      if (onScrollRef.current) {
-        onScrollRef.current(stateRef.current);
+      if (onScrollUpdateRef.current) {
+        onScrollUpdateRef.current(stateRef.current);
       }
       if (onScrollHandleRef.current !== null) {
         onScrollHandleRef.current(stateRef.current);
@@ -200,10 +200,10 @@ function Scroll(
     []
   );
 
-  const onScrollRef = React.useRef(onScroll);
+  const onScrollUpdateRef = React.useRef(onScrollUpdate);
   React.useEffect(() => {
-    onScrollRef.current = onScroll;
-  }, [onScroll]);
+    onScrollUpdateRef.current = onScrollUpdate;
+  }, [onScrollUpdate]);
 
   const onScrollHandleRef = React.useRef<OnScroll | null>(null);
 
@@ -257,17 +257,15 @@ function Scroll(
 
   return (
     <ScrollWrapper
+      {...props}
       ref={wrapperRef}
-      style={{ ...props, overflow: native ? "auto" : "hidden" }}
+      style={{ overflow: native ? "auto" : "hidden" }}
       className={classNamePrefix}
     >
       <ScrollPlane
         className={`${classNamePrefix}-plane`}
         ref={planeRef}
-        style={{
-          ...style,
-          transform: native ? "none" : undefined,
-        }}
+        style={{ ...style, transform: native ? "none" : undefined }}
       >
         {children}
       </ScrollPlane>
