@@ -1,5 +1,10 @@
 {
-  "private": true,
+  "name": "scroll-rig",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/enijar/scroll-rig"
+  },
   "scripts": {
     "start": "NODE_ENV=development webpack serve --mode development",
     "build": "NODE_ENV=production webpack --mode production"
