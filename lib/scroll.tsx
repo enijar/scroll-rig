@@ -120,8 +120,6 @@ function Scroll(
       }%`;
     }
 
-    plane.style.paddingTop =
-      stateRef.current.maxScroll.x === 0 ? "0px" : scrollBarSize;
     scrollBarX.style.transform =
       stateRef.current.maxScroll.x === 0
         ? "none"
@@ -134,10 +132,14 @@ function Scroll(
         ? `calc(${scrollBarSize} / 4)`
         : scrollBarSize;
 
-    plane.style.paddingLeft =
-      stateRef.current.maxScroll.x === 0 ? "0px" : scrollBarSize;
-    plane.style.paddingBottom =
-      stateRef.current.maxScroll.x > 0 ? "0px" : scrollBarSize;
+    plane.style.maxHeight =
+      stateRef.current.maxScroll.x === 0
+        ? undefined
+        : `calc(100% - ${scrollBarSize})`;
+    plane.style.maxWidth =
+      stateRef.current.maxScroll.y === 0
+        ? undefined
+        : `calc(100% - ${scrollBarSize})`;
 
     const offsetX =
       stateRef.current.wrapperSize.width * stateRef.current.progress.x;
@@ -239,7 +241,10 @@ function Scroll(
     >
       <ScrollPlane
         ref={planeRef}
-        style={{ ...style, transform: native ? "none" : undefined }}
+        style={{
+          ...style,
+          transform: native ? "none" : undefined,
+        }}
       >
         {children}
       </ScrollPlane>

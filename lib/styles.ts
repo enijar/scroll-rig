@@ -8,8 +8,7 @@ export const ScrollWrapper = styled.div`
 
 export const ScrollPlane = styled.div`
   will-change: transform;
-  min-width: max-content;
-  min-height: max-content;
+  white-space: nowrap;
 `;
 
 type ScrollBarsProps = {
