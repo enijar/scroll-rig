@@ -22,7 +22,7 @@ export default function useKeyEvents(
           stateRef.current.progress.y = 0;
           break;
       }
-      update(true);
+      update();
     }
 
     window.addEventListener("keydown", onKeyDown);
