@@ -10,10 +10,12 @@ import { DEPTH } from "./consts";
 import { useSore } from "./store";
 
 export type Element = {
+  src: string;
   x: number;
   y: number;
   width: number;
   height: number;
+  target: HTMLElement;
 };
 
 type Props = {
@@ -38,20 +40,20 @@ export default function CustomScroll({ children, elements = [] }: Props) {
       <Scroll controlled ref={scrollRef}>
         {children}
       </Scroll>
-      <ReactCanvas
-        style={{ position: "absolute", inset: 0, pointerEvents: "none" }}
-      >
-        <Canvas elements={elements} />
-        <ambientLight />
-        <PerspectiveCamera
-          ref={cameraRef}
-          makeDefault
-          position={[0, 0, DEPTH]}
-          frustumCulled={false}
-          near={0.1}
-          far={DEPTH * 3}
-          fov={fov}
-        />
+      <ReactCanvas className="canvas">
+        <React.Suspense fallback={<group />}>
+          <Canvas elements={elements} />
+          <ambientLight />
+          <PerspectiveCamera
+            ref={cameraRef}
+            makeDefault
+            position={[0, 0, DEPTH]}
+            frustumCulled={false}
+            near={0.1}
+            far={DEPTH * 3}
+            fov={fov}
+          />
+        </React.Suspense>
       </ReactCanvas>
     </CustomScrollWrapper>
   );

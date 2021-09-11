@@ -4,6 +4,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { toWorld } from "./utils";
 import { useSore } from "./store";
 import { Element } from "./custom-scroll";
+import Image from "./image/image";
 
 type Props = {
   elements: Element[];
@@ -14,7 +15,6 @@ export default function Canvas({ elements }: Props) {
   const { scrollApi } = useSore();
 
   const groupRef = React.useRef<THREE.Group>(null);
-
   React.useEffect(() => {
     scrollApi.onScroll((state) => {
       if (groupRef.current === null) return;
@@ -24,19 +24,14 @@ export default function Canvas({ elements }: Props) {
     });
   }, [size]);
 
-  useFrame(() => {
+  useFrame(({ clock }) => {
     scrollApi?.update();
   });
 
   return (
     <group ref={groupRef}>
       {elements.map((element, index) => {
-        return (
-          <mesh key={index} position={toWorld(size, element)}>
-            <planeBufferGeometry args={[element.width, element.height]} />
-            <meshStandardMaterial color="#ff0000" />
-          </mesh>
-        );
+        return <Image key={index} element={element} />;
       })}
     </group>
   );

@@ -3,6 +3,23 @@ import styled from "styled-components";
 export const Wrapper = styled.div`
   display: flex;
   height: 100%;
+
+  h2 {
+    text-align: center;
+  }
+
+  img {
+    display: block;
+    height: 50vh;
+    aspect-ratio: 1 / 1;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .element {
+    opacity: 0;
+  }
 `;
 
 export const Box = styled.div`

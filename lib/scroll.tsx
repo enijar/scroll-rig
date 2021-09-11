@@ -14,6 +14,7 @@ type OnScroll = (state: State) => void;
 export type ScrollApi = {
   update: () => void;
   onScroll: (fn: OnScroll) => void;
+  state: State;
 };
 
 const DEFAULT_STYLE = {};
@@ -164,6 +165,7 @@ function Scroll(
     (ref as React.MutableRefObject<ScrollApi>).current = {
       update,
       onScroll,
+      state: stateRef.current,
     };
   }, [ref, update, onScroll]);
 

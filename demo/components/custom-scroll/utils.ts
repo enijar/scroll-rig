@@ -1,11 +1,9 @@
-import { Element } from "./custom-scroll";
-
 export function toWorld(
   size: {
     width: number;
     height: number;
   },
-  element: Element & { z?: number }
+  element: { width: number; height: number; x: number; y: number; z?: number }
 ): [x: number, y: number, z: number] {
   const { x, y, z = 0, width, height } = element;
   const cx = size.width / 2;
