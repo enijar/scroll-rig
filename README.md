@@ -1,10 +1,10 @@
 # Scroll Rig
 
-Simple scroll rig for virtual scrolls.
+A React scroll rig for custom scroll bar styles and controlled scrolling state.
 
-### Getting Started
+### Contributing
 
-Set up a new project:
+Install and run the development server:
 
 ```shell
 npm install
