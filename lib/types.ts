@@ -11,6 +11,7 @@ export type State = {
     x: number;
     y: number;
   };
+  isScrolling: boolean;
 };
 
 export type Touch = {
