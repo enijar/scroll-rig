@@ -1,6 +1,6 @@
 {
   "name": "scroll-rig",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
@@ -10,7 +10,7 @@
   "scripts": {
     "start": "NODE_ENV=development webpack serve --mode development",
     "build": "NODE_ENV=production webpack --mode production",
-    "release": "./bin/release.js"
+    "prepublishOnly": "./bin/publish.js"
   },
   "browserslist": [
     "defaults",

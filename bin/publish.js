@@ -7,5 +7,3 @@ execSync(`git tag -a ${version} -m "release: ${version}"`, {
   stdio: "inherit",
 });
 execSync(`git push origin ${version}`);
-execSync(`npm run package`);
-execSync(`npm publish`);
