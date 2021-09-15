@@ -19,7 +19,7 @@ export default function ScrollTrigger() {
   return (
     <Wrapper>
       <ScrollRig onScrollUpdate={onScrollUpdate}>
-        <h2>Custom Scroll 👇</h2>
+        <h2>Scroll Trigger 👇</h2>
         {Array.from({ length: 10 }).map((_, index) => {
           return (
             <Box

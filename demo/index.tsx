@@ -14,6 +14,9 @@ const NativeComparison = React.lazy(
 const ScrollTrigger = React.lazy(
   () => import("./examples/scroll-trigger/scroll-trigger")
 );
+const CustomScroll = React.lazy(
+  () => import("./examples/custom-scroll/custom-scroll")
+);
 
 render(
   <React.StrictMode>
@@ -31,6 +34,11 @@ render(
             exact
             path="/examples/scroll-trigger"
             component={ScrollTrigger}
+          />
+          <Route
+            exact
+            path="/examples/custom-scroll"
+            component={CustomScroll}
           />
         </Switch>
       </React.Suspense>

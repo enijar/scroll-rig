@@ -13,6 +13,9 @@ export default function Home() {
         <li>
           <Link to="/examples/scroll-trigger">Scroll Trigger</Link>
         </li>
+        <li>
+          <Link to="/examples/custom-scroll">Custom Scroll</Link>
+        </li>
       </ol>
     </Wrapper>
   );
