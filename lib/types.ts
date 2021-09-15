@@ -18,6 +18,7 @@ export type State = {
     y: number;
   };
   isScrolling: boolean;
+  locked: boolean;
 };
 
 export type Touch = {

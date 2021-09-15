@@ -16,6 +16,9 @@ export default function Home() {
         <li>
           <Link to="/examples/custom-scroll">Custom Scroll</Link>
         </li>
+        <li>
+          <Link to="/examples/webgl-scroll">Webgl Scroll</Link>
+        </li>
       </ol>
     </Wrapper>
   );

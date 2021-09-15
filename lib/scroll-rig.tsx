@@ -55,6 +55,7 @@ function ScrollRig(
       y: 0,
     },
     isScrolling: false,
+    locked: false,
   });
 
   const wrapperRef = React.useRef<HTMLDivElement>(null);
@@ -64,6 +65,8 @@ function ScrollRig(
   const scrollBarYRef = React.useRef<HTMLDivElement>(null);
   const scrollBarHandleXRef = React.useRef<HTMLDivElement>(null);
   const scrollBarHandleYRef = React.useRef<HTMLDivElement>(null);
+
+  const initialisedRef = React.useRef(false);
 
   const update = React.useCallback(() => {
     const wrapper = wrapperRef.current;
@@ -175,12 +178,20 @@ function ScrollRig(
       }
     }
 
+    if (!initialisedRef.current) {
+      initialisedRef.current = true;
+      if (onScrollUpdateRef.current) {
+        onScrollUpdateRef.current(stateRef.current);
+      }
+    }
+
     stateRef.current.isScrolling = false;
   }, [controlled, native]);
 
   const updateProgress = React.useCallback(
     (dirX: number, dirY: number, distX: number, distY: number) => {
       const state = stateRef.current;
+      if (state.locked) return;
       const maxX = state.maxScroll.x;
       const maxY = state.maxScroll.y;
       const velocityX = dirX === 0 ? 0 : (1 / maxX) * distX * dirX;

@@ -17,6 +17,9 @@ const ScrollTrigger = React.lazy(
 const CustomScroll = React.lazy(
   () => import("./examples/custom-scroll/custom-scroll")
 );
+const WebglScroll = React.lazy(
+  () => import("./examples/webgl-scroll/webgl-scroll")
+);
 
 render(
   <React.StrictMode>
@@ -39,6 +42,11 @@ render(
             exact
             path="/examples/custom-scroll"
             component={CustomScroll}
+          />
+          <Route
+            exact
+            path="/examples/webgl-scroll"
+            component={WebglScroll}
           />
         </Switch>
       </React.Suspense>

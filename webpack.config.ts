@@ -47,6 +47,10 @@ const config = {
           },
         ],
       },
+      {
+        test: /\.(jpe?g|png|svg|glb)$/,
+        use: "file-loader",
+      },
     ],
   },
   plugins: [
