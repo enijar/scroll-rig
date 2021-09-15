@@ -17,7 +17,7 @@ export const Wrapper = styled.div`
 export const Box = styled.div`
   height: 50vh;
   aspect-ratio: 1 / 1;
-  background-color: crimson;
+  background-color: hsl(0, 50%, 50%);
   display: flex;
   align-items: center;
   justify-content: center;
